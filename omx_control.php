@@ -12,7 +12,8 @@ function play($file) {
 		posix_mkfifo(FIFO, 0777);
 		chmod(FIFO, 0777);
 		shell_exec ( getcwd().'/omx_php.sh '.escapeshellarg($file));
-		error_log(date("Y-m-d H:i:s") ." ::: ". getcwd().'/omx_php.sh '.escapeshellarg($file) , 3, "mouchard.log");
+		error_log("\n".date("Y-m-d H:i:s") ." : ". getcwd().'/omx_php.sh '.escapeshellarg($file), 3, "mouchard.log");
+		
 		$out = 'playing '.basename($file);
 	} else {
 		$err = 'omxplayer is already runnning';
@@ -27,6 +28,7 @@ function send($command) {
 		if ( is_writable(FIFO) ) {
 			if ( $fifo = fopen(FIFO, 'w') ) {
 				stream_set_blocking($fifo, false);
+				error_log($command." \n", 3, "mouchard.log");
 				fwrite($fifo, $command);
 				fclose($fifo);
 				if ($command == 'q') {
